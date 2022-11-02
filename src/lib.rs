@@ -10,16 +10,6 @@ use wasm_bindgen::prelude::*;
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[wasm_bindgen]
-extern "C" {
-    fn alert(s: &str);
-}
-
-#[wasm_bindgen]
-pub fn greet() {
-    alert("Hello, cirilica!");
-}
-
-#[wasm_bindgen]
 pub fn to_serbian_cyrillic(word: String) -> String {
     word.chars()
         .into_iter()
@@ -45,15 +35,11 @@ fn to_serbian_cyrillic_char(letter: char) -> char {
         'N' => 'Н',
         'O' => 'О',
         'P' => 'П',
-        'Q' => letter,
         'R' => 'Р',
         'S' => 'С',
         'T' => 'Т',
         'U' => 'У',
         'V' => 'В',
-        'W' => letter,
-        'X' => letter,
-        'Y' => letter,
         'Z' => 'З',
         'a' => 'а',
         'b' => 'б',
@@ -71,15 +57,11 @@ fn to_serbian_cyrillic_char(letter: char) -> char {
         'n' => 'н',
         'o' => 'о',
         'p' => 'п',
-        'q' => letter,
         'r' => 'р',
         's' => 'с',
         't' => 'т',
         'u' => 'у',
         'v' => 'в',
-        'w' => letter,
-        'x' => letter,
-        'y' => letter,
         'z' => 'з',
         'Ć' => 'Ћ',
         'ć' => 'ћ',
