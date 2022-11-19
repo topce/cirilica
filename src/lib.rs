@@ -14,8 +14,11 @@ pub fn to_serbian_cyrillic(word: String) -> String {
     let utf_word = word
         .replace("nj", "ǌ")
         .replace("lj", "ǉ")
+        .replace("dž", "ǆ")
         .replace("Nj", "ǋ")
-        .replace("Lj", "ǈ");
+        .replace("Lj", "ǈ")
+        .replace("Dž", "ǅ")
+        ;
     utf_word
         .chars()
         .into_iter()
