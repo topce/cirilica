@@ -8,6 +8,7 @@ use wasm_bindgen::prelude::*;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
+#[wasm_bindgen]
 pub fn to_serbian_cyrillic(word: String) -> String {
     let mut result = String::with_capacity(word.bytes().len() * 2);
     let mut chars = word.chars();
@@ -83,7 +84,6 @@ pub fn to_serbian_cyrillic(word: String) -> String {
     result
 }
 
-#[wasm_bindgen]
 pub fn to_serbian_cyrillic_zip(word: String) -> String {
     let mut result = String::with_capacity(word.bytes().len() * 2);
     let count = word.chars().count();
@@ -140,7 +140,6 @@ pub fn to_serbian_cyrillic_zip(word: String) -> String {
     result
 }
 
-#[wasm_bindgen]
 pub fn to_serbian_cyrillic_replace(word: String) -> String {
     let utf_word = word
         .replace("nj", "ǌ")
