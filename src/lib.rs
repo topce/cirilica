@@ -1,6 +1,5 @@
 mod utils;
 
-use std::char;
 use wasm_bindgen::prelude::*;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
@@ -9,16 +8,147 @@ use wasm_bindgen::prelude::*;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-#[wasm_bindgen]
 pub fn to_serbian_cyrillic(word: String) -> String {
+    let mut result = String::with_capacity(word.bytes().len() * 2);
+    let mut chars = word.chars();
+    let mut previous_char = '\0';
+    loop {
+        let letter = chars.next();
+
+        match letter {
+            Some(a) => match a {
+                'n' | 'l' | 'd' | 'N' | 'L' | 'D' => {
+                    if previous_char != '\0' {
+                        result.push(to_serbian_cyrillic_char(previous_char));
+                    }
+                    previous_char = a;
+                }
+
+                'j' => match previous_char {
+                    'l' => {
+                        result.push('љ');
+                        previous_char = '\0';
+                    }
+                    'L' => {
+                        result.push('Љ');
+                        previous_char = '\0';
+                    }
+                    'n' => {
+                        result.push('њ');
+                        previous_char = '\0';
+                    }
+                    'N' => {
+                        result.push('Њ');
+                        previous_char = '\0';
+                    }
+                    '\0' => {
+                        result.push('ј');
+                    }
+                    _ => {
+                        result.push(to_serbian_cyrillic_char(previous_char));
+                        result.push('ј');
+                    }
+                },
+                'ž' => match previous_char {
+                    'd' => {
+                        result.push('џ');
+                        previous_char = '\0';
+                    }
+                    'D' => {
+                        result.push('Џ');
+                        previous_char = '\0';
+                    }
+                    '\0' => {
+                        result.push('ж');
+                    }
+                    _ => {
+                        result.push(to_serbian_cyrillic_char(previous_char));
+                        result.push('ж');
+                    }
+                },
+
+                _ => {
+                    if previous_char != '\0' {
+                        result.push(to_serbian_cyrillic_char(previous_char));
+                        previous_char = '\0';
+                    }
+                    result.push(to_serbian_cyrillic_char(a));
+                }
+            },
+            None => break,
+        }
+    }
+    result.shrink_to_fit();
+
+    result
+}
+
+#[wasm_bindgen]
+pub fn to_serbian_cyrillic_zip(word: String) -> String {
+    let mut result = String::with_capacity(word.bytes().len() * 2);
+    let count = word.chars().count();
+    let mut should_ignore_next = false;
+    let mut i = 0u128;
+    for (a, b) in word
+        .chars()
+        .into_iter()
+        .zip(word.chars().into_iter().skip(1))
+    {
+        i = i + 1;
+        let letter = match (a, b) {
+            ('n', 'j') => {
+                should_ignore_next = true;
+                'њ'
+            }
+            ('N', 'j') => {
+                should_ignore_next = true;
+                'Њ'
+            }
+            ('l', 'j') => {
+                should_ignore_next = true;
+                'љ'
+            }
+            ('L', 'j') => {
+                should_ignore_next = true;
+                'Љ'
+            }
+            ('d', 'ž') => {
+                should_ignore_next = true;
+                'џ'
+            }
+            ('D', 'ž') => {
+                should_ignore_next = true;
+                'Џ'
+            }
+            (_, _) => {
+                if i + 1 == count as u128 {
+                    to_serbian_cyrillic_char(b)
+                } else {
+                    if should_ignore_next {
+                        should_ignore_next = false;
+                        '\0'
+                    } else {
+                        to_serbian_cyrillic_char(a)
+                    }
+                }
+            }
+        };
+        if letter != '\0' {
+            result.push_str(&letter.to_string());
+        }
+    }
+    result
+}
+
+#[wasm_bindgen]
+pub fn to_serbian_cyrillic_replace(word: String) -> String {
     let utf_word = word
         .replace("nj", "ǌ")
         .replace("lj", "ǉ")
         .replace("dž", "ǆ")
         .replace("Nj", "ǋ")
         .replace("Lj", "ǈ")
-        .replace("Dž", "ǅ")
-        ;
+        .replace("Dž", "ǅ");
     utf_word
         .chars()
         .into_iter()
@@ -90,5 +220,46 @@ fn to_serbian_cyrillic_char(letter: char) -> char {
         'ǆ' => 'џ',
         'š' => 'ш',
         _ => letter,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    // Note this useful idiom: importing names from outer (for mod tests) scope.
+    use super::*;
+
+    #[test]
+    fn test_main() {
+        assert_eq!(
+            to_serbian_cyrillic(
+                "abvgdđežzijklljmnnjoprstćufhcčdžš"
+                    .repeat(1000000)
+                    .to_string()
+            ),
+            "абвгдђежзијклљмнњопрстћуфхцчџш".repeat(1000000)
+        );
+    }
+
+    #[test]
+    fn test_zip() {
+        assert_eq!(
+            to_serbian_cyrillic_zip(
+                "abvgdđežzijklljmnnjoprstćufhcčdžš"
+                    .repeat(1000000)
+                    .to_string()
+            ),
+            "абвгдђежзијклљмнњопрстћуфхцчџш".repeat(1000000)
+        );
+    }
+    #[test]
+    fn test_replace() {
+        assert_eq!(
+            to_serbian_cyrillic_replace(
+                "abvgdđežzijklljmnnjoprstćufhcčdžš"
+                    .repeat(1000000)
+                    .to_string()
+            ),
+            "абвгдђежзијклљмнњопрстћуфхцчџш".repeat(1000000)
+        );
     }
 }
