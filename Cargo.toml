@@ -10,6 +10,11 @@ documentation = "https://github.com/topce/cirilica"
 homepage = "https://github.com/topce/cirilica"
 repository = "https://github.com/topce/cirilica"
 readme = "README.md"
+include = [
+    "**/*.rs",
+    "Cargo.toml",
+]
+
 [lib]
 crate-type = ["cdylib", "rlib"]
 
