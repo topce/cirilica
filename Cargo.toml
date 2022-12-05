@@ -1,8 +1,19 @@
 [package]
 name = "cirilica"
-version = "0.4.0"
+version = "0.6.0"
 authors = ["topce <slobodan.filipovic@gmail.com>"]
 edition = "2018"
+description = "Simple library to traslate from serbian latin to serbian cyrillic "
+keywords = ["serbian", "latin", "cyrillic", "latinica", "cirilica"]
+license = "MIT"
+documentation = "https://github.com/topce/cirilica"
+homepage = "https://github.com/topce/cirilica"
+repository = "https://github.com/topce/cirilica"
+readme = "README.md"
+include = [
+    "**/*.rs",
+    "Cargo.toml",
+]
 
 [lib]
 crate-type = ["cdylib", "rlib"]

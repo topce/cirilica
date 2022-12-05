@@ -8,6 +8,7 @@ use wasm_bindgen::prelude::*;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
+#[wasm_bindgen]
 pub fn to_serbian_cyrillic(word: String) -> String {
     let mut result = String::with_capacity(word.bytes().len() * 2);
     let mut chars = word.chars();
@@ -93,6 +94,62 @@ pub fn to_serbian_cyrillic(word: String) -> String {
     result
 }
 
+#[wasm_bindgen]
+pub fn to_serbian_cyrillic_zip(word: String) -> String {
+    let mut result = String::with_capacity(word.bytes().len() * 2);
+    let count = word.chars().count();
+    let mut should_ignore_next = false;
+    let mut i = 0u128;
+    for (a, b) in word
+        .chars()
+        .into_iter()
+        .zip(word.chars().into_iter().skip(1))
+    {
+        i = i + 1;
+        let letter = match (a, b) {
+            ('n', 'j') => {
+                should_ignore_next = true;
+                'њ'
+            }
+            ('N', 'j') => {
+                should_ignore_next = true;
+                'Њ'
+            }
+            ('l', 'j') => {
+                should_ignore_next = true;
+                'љ'
+            }
+            ('L', 'j') => {
+                should_ignore_next = true;
+                'Љ'
+            }
+            ('d', 'ž') => {
+                should_ignore_next = true;
+                'џ'
+            }
+            ('D', 'ž') => {
+                should_ignore_next = true;
+                'Џ'
+            }
+            (_, _) => {
+                if i + 1 == count as u128 {
+                    to_serbian_cyrillic_char(b)
+                } else {
+                    if should_ignore_next {
+                        should_ignore_next = false;
+                        '\0'
+                    } else {
+                        to_serbian_cyrillic_char(a)
+                    }
+                }
+            }
+        };
+        if letter != '\0' {
+            result.push_str(&letter.to_string());
+        }
+    }
+    result
+}
 
 
 fn to_serbian_cyrillic_char(letter: char) -> char {
