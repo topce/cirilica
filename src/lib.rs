@@ -42,7 +42,7 @@ pub fn to_serbian_cyrillic(word: String) -> String {
                         result.push('Њ');
                         previous_char = '\0';
                     }
-                    'd'|'D' => {
+                    'd' | 'D' => {
                         result.push(to_serbian_cyrillic_char(previous_char));
                         result.push('ј');
                         previous_char = '\0';
@@ -64,7 +64,7 @@ pub fn to_serbian_cyrillic(word: String) -> String {
                         result.push('Џ');
                         previous_char = '\0';
                     }
-                    'l'|'L'|'n'|'N' => {
+                    'l' | 'L' | 'n' | 'N' => {
                         result.push(to_serbian_cyrillic_char(previous_char));
                         result.push('ж');
                         previous_char = '\0';
@@ -93,64 +93,6 @@ pub fn to_serbian_cyrillic(word: String) -> String {
 
     result
 }
-
-#[wasm_bindgen]
-pub fn to_serbian_cyrillic_zip(word: String) -> String {
-    let mut result = String::with_capacity(word.bytes().len() * 2);
-    let count = word.chars().count();
-    let mut should_ignore_next = false;
-    let mut i = 0u128;
-    for (a, b) in word
-        .chars()
-        .into_iter()
-        .zip(word.chars().into_iter().skip(1))
-    {
-        i = i + 1;
-        let letter = match (a, b) {
-            ('n', 'j') => {
-                should_ignore_next = true;
-                'њ'
-            }
-            ('N', 'j') => {
-                should_ignore_next = true;
-                'Њ'
-            }
-            ('l', 'j') => {
-                should_ignore_next = true;
-                'љ'
-            }
-            ('L', 'j') => {
-                should_ignore_next = true;
-                'Љ'
-            }
-            ('d', 'ž') => {
-                should_ignore_next = true;
-                'џ'
-            }
-            ('D', 'ž') => {
-                should_ignore_next = true;
-                'Џ'
-            }
-            (_, _) => {
-                if i + 1 == count as u128 {
-                    to_serbian_cyrillic_char(b)
-                } else {
-                    if should_ignore_next {
-                        should_ignore_next = false;
-                        '\0'
-                    } else {
-                        to_serbian_cyrillic_char(a)
-                    }
-                }
-            }
-        };
-        if letter != '\0' {
-            result.push_str(&letter.to_string());
-        }
-    }
-    result
-}
-
 
 fn to_serbian_cyrillic_char(letter: char) -> char {
     match letter {
@@ -239,14 +181,8 @@ mod tests {
     #[test]
     fn test_main1() {
         assert_eq!(
-            to_serbian_cyrillic(
-                "ovde mu je pogotovu materijal k slavnom djelu"
-                    
-                    .to_string()
-            ),
+            to_serbian_cyrillic("ovde mu je pogotovu materijal k slavnom djelu".to_string()),
             "овде му је поготову материјал к славном дјелу"
         );
     }
-
-    
 }
