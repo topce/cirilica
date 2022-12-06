@@ -94,6 +94,14 @@ pub fn to_serbian_cyrillic(word: String) -> String {
     result
 }
 
+pub fn to_serbian_cyrillic_utf8(word: String) -> String {
+    word
+        .chars()
+        .into_iter()
+        .map(|x| to_serbian_cyrillic_char(x))
+        .collect::<String>()
+}
+
 fn to_serbian_cyrillic_char(letter: char) -> char {
     match letter {
         'A' => 'А',
@@ -204,4 +212,25 @@ mod tests {
             "АБВГДЂЕЖЗИЈКЛЉМНЊОПРСТЋУФХЦЧЏШ".repeat(1000000)
         );
     }
+    #[test]
+    fn test_njljdžNJLJDž() {
+        assert_eq!(
+            to_serbian_cyrillic(
+                "njljdžNjLjDž"
+                    .to_string()
+            ),
+            "њљџЊЉЏ"
+        );
+    }
+    #[test]
+    fn test_njljdž_utf8() {
+        assert_eq!(
+            to_serbian_cyrillic_utf8(
+                "njljdžNjLjDž"
+                    .to_string()
+            ),
+            "нјлјджНјЛјДж"
+        );
+    }
+
 }
