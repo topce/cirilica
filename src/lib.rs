@@ -167,7 +167,22 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_main() {
+    fn test_azbuka_small() {
+        assert_eq!(
+            to_serbian_cyrillic("abvgdđežzijklljmnnjoprstćufhcčdžš".to_string()),
+            "абвгдђежзијклљмнњопрстћуфхцчџш"
+        );
+    }
+
+    #[test]
+    fn test_azbuka_big() {
+        assert_eq!(
+            to_serbian_cyrillic("ABVGDĐEŽZIJKLLjMNNjOPRSTĆUFHCČDžŠ".to_string()),
+            "АБВГДЂЕЖЗИЈКЛЉМНЊОПРСТЋУФХЦЧЏШ"
+        );
+    }
+    #[test]
+    fn test_azbuka_small_1000000() {
         assert_eq!(
             to_serbian_cyrillic(
                 "abvgdđežzijklljmnnjoprstćufhcčdžš"
@@ -179,10 +194,14 @@ mod tests {
     }
 
     #[test]
-    fn test_main1() {
+    fn test_azbuka_big_1000000() {
         assert_eq!(
-            to_serbian_cyrillic("ovde mu je pogotovu materijal k slavnom djelu".to_string()),
-            "овде му је поготову материјал к славном дјелу"
+            to_serbian_cyrillic(
+                "ABVGDĐEŽZIJKLLjMNNjOPRSTĆUFHCČDžŠ"
+                    .repeat(1000000)
+                    .to_string()
+            ),
+            "АБВГДЂЕЖЗИЈКЛЉМНЊОПРСТЋУФХЦЧЏШ".repeat(1000000)
         );
     }
 }
