@@ -213,7 +213,7 @@ mod tests {
         );
     }
     #[test]
-    fn test_njljdžNJLJDž() {
+    fn test_njljdž() {
         assert_eq!(
             to_serbian_cyrillic(
                 "njljdžNjLjDž"
