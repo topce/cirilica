@@ -9,6 +9,10 @@ use wasm_bindgen::prelude::*;
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[wasm_bindgen]
+/// transform utf-8 serbian latinic to serbian cyrilic
+/// also translate two letters nj,lj and dž
+/// and capital Nj,Lj and Dž 
+/// in one cyrilic letter  
 pub fn to_serbian_cyrillic(word: String) -> String {
     let mut result = String::with_capacity(word.bytes().len() * 2);
     let mut chars = word.chars();
@@ -93,6 +97,11 @@ pub fn to_serbian_cyrillic(word: String) -> String {
 
     result
 }
+/// transform utf-8 serbian latinic to serbian cyrilic
+/// does translate two letters nj,lj and dž
+/// and capital Nj,Lj and Dž 
+/// in one cyrilic letter but 
+/// in 2 cyrilic letters  
 
 pub fn to_serbian_cyrillic_utf8(word: String) -> String {
     word
