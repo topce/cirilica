@@ -19,45 +19,11 @@ pub fn latin_to_cyrillic(input: String) -> String {
 
     while let Some(c) = iter.next() {
         match c {
-            'a' => output.push('а'),
-            'b' => output.push('б'),
-            'c' => output.push('ц'),
-            'č' => output.push('ч'),
-            'ć' => output.push('ћ'),
-            'd' => {
-                if let Some(&next) = iter.peek() {
-                    if next == 'ž' {
-                        output.push('џ');
-                        iter.next();
-                    } else {
-                        output.push('д');
-                    }
-                } else {
-                    output.push('д');
-                }
-            }
-            'đ' => output.push('ђ'),
+            's' => output.push('с'),
+            'o' => output.push('о'),
             'e' => output.push('е'),
-            'ž' => output.push('ж'),
-            'f' => output.push('ф'),
-            'g' => output.push('г'),
-            'h' => output.push('х'),
+            'a' => output.push('а'),
             'i' => output.push('и'),
-            'j' => output.push('ј'),
-            'k' => output.push('к'),
-            'l' => {
-                if let Some(&next) = iter.peek() {
-                    if next == 'j' {
-                        output.push('љ');
-                        iter.next();
-                    } else {
-                        output.push('л');
-                    }
-                } else {
-                    output.push('л');
-                }
-            }
-            'm' => output.push('м'),
             'n' => {
                 if let Some(&next) = iter.peek() {
                     if next == 'j' {
@@ -70,51 +36,54 @@ pub fn latin_to_cyrillic(input: String) -> String {
                     output.push('н');
                 }
             }
-            'o' => output.push('о'),
-            'p' => output.push('п'),
-            'r' => output.push('р'),
-            's' => output.push('с'),
-            'š' => output.push('ш'),
             't' => output.push('т'),
-            'u' => output.push('у'),
-            'v' => output.push('в'),
-            'z' => output.push('з'),
-            'A' => output.push('А'),
-            'B' => output.push('Б'),
-            'V' => output.push('В'),
-            'G' => output.push('Г'),
-            'D' => {
+            'r' => output.push('р'),
+            'd' => {
                 if let Some(&next) = iter.peek() {
                     if next == 'ž' {
-                        output.push('Џ');
+                        output.push('џ');
                         iter.next();
                     } else {
-                        output.push('Д');
+                        output.push('д');
                     }
                 } else {
-                    output.push('Д');
+                    output.push('д');
                 }
             }
-            'Đ' => output.push('Ђ'),
-            'E' => output.push('Е'),
-            'Ž' => output.push('Ж'),
-            'Z' => output.push('З'),
-            'I' => output.push('И'),
-            'J' => output.push('Ј'),
-            'K' => output.push('К'),
-            'L' => {
+            'l' => {
                 if let Some(&next) = iter.peek() {
                     if next == 'j' {
-                        output.push('Љ');
+                        output.push('љ');
                         iter.next();
                     } else {
-                        output.push('Л');
+                        output.push('л');
                     }
                 } else {
-                    output.push('Л');
+                    output.push('л');
                 }
             }
-            'M' => output.push('М'),
+            'u' => output.push('у'),
+            'k' => output.push('к'),
+            'm' => output.push('м'),
+            'b' => output.push('б'),
+            'p' => output.push('п'),
+            'z' => output.push('з'),
+            'š' => output.push('ш'),
+            'v' => output.push('в'),
+            'j' => output.push('ј'),
+            'h' => output.push('х'),
+            'f' => output.push('ф'),
+            'ž' => output.push('ж'),
+            'g' => output.push('г'),
+            'c' => output.push('ц'),
+            'č' => output.push('ч'),
+            'đ' => output.push('ђ'),
+            'ć' => output.push('ћ'),
+            'S' => output.push('С'),
+            'O' => output.push('О'),
+            'E' => output.push('Е'),
+            'I' => output.push('И'),
+            'A' => output.push('А'),
             'N' => {
                 if let Some(&next) = iter.peek() {
                     if next == 'j' {
@@ -127,18 +96,49 @@ pub fn latin_to_cyrillic(input: String) -> String {
                     output.push('Н');
                 }
             }
-            'O' => output.push('О'),
-            'P' => output.push('П'),
-            'R' => output.push('Р'),
-            'S' => output.push('С'),
             'T' => output.push('Т'),
-            'Ć' => output.push('Ћ'),
+            'R' => output.push('Р'),
+            'D' => {
+                if let Some(&next) = iter.peek() {
+                    if next == 'ž' {
+                        output.push('Џ');
+                        iter.next();
+                    } else {
+                        output.push('Д');
+                    }
+                } else {
+                    output.push('Д');
+                }
+            }
+            'L' => {
+                if let Some(&next) = iter.peek() {
+                    if next == 'j' {
+                        output.push('Љ');
+                        iter.next();
+                    } else {
+                        output.push('Л');
+                    }
+                } else {
+                    output.push('Л');
+                }
+            }
             'U' => output.push('У'),
-            'F' => output.push('Ф'),
+            'K' => output.push('К'),
+            'M' => output.push('М'),
+            'B' => output.push('Б'),
+            'P' => output.push('П'),
+            'Z' => output.push('З'),
+            'Š' => output.push('Ш'),
+            'V' => output.push('В'),
+            'J' => output.push('Ј'),
             'H' => output.push('Х'),
+            'F' => output.push('Ф'),
+            'Ž' => output.push('Ж'),
+            'G' => output.push('Г'),
             'C' => output.push('Ц'),
             'Č' => output.push('Ч'),
-            'Š' => output.push('Ш'),
+            'Ć' => output.push('Ћ'),
+            'Đ' => output.push('Ђ'),
             _ => output.push(c),
         }
     }
